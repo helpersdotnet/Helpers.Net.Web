@@ -1,0 +1,5 @@
+bin/
+obj/
+
+*.suo
+*.swp # ignore vim swap files
