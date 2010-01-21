@@ -60,15 +60,7 @@ namespace Helpers.Net.Web
         public static string GetHtmlForUserControl(string userControlLocation, bool enableViewState)
         {
             Page page = new Page();
-
-            if (!enableViewState)
-            {
-                page.Init += (object sender, EventArgs e) =>
-                {
-                    page.EnableViewState = false;
-                };
-            }
-
+            page.EnableEventValidation = false;
             UserControl userControl = (UserControl)page.LoadControl(userControlLocation);
             userControl.EnableViewState = false;
 
@@ -81,9 +73,13 @@ namespace Helpers.Net.Web
 
             HttpContext.Current.Server.Execute(page, writer, false);
 
-            return Regex.Replace(writer.ToString(), @"<[/]?(form)[^>]*?>", "", RegexOptions.IgnoreCase);
-        }
+            string html = writer.ToString();
 
+            if (!enableViewState)
+                html = WebHelper.ViewState.RemoveViewState(html);
+
+            return Regex.Replace(html, @"<[/]?(form)[^>]*?>", "", RegexOptions.IgnoreCase);
+        }
 
     }
 }
