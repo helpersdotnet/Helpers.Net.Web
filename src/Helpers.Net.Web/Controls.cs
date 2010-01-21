@@ -1,4 +1,9 @@
-﻿using System.Web.UI;
+﻿using System.IO;
+using System.Text.RegularExpressions;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.HtmlControls;
+using System;
 
 namespace Helpers.Net.Web
 {
@@ -46,5 +51,39 @@ namespace Helpers.Net.Web
             return null;
 
         }
+
+        /// <summary>
+        /// Loads the usercontrol and returns html.
+        /// </summary>
+        /// <param name="userControlLocation">Location of the usercontrol.</param>
+        /// <returns>Html returned by the usercontrol.</returns>
+        public static string GetHtmlForUserControl(string userControlLocation, bool enableViewState)
+        {
+            Page page = new Page();
+
+            if (!enableViewState)
+            {
+                page.Init += (object sender, EventArgs e) =>
+                {
+                    page.EnableViewState = false;
+                };
+            }
+
+            UserControl userControl = (UserControl)page.LoadControl(userControlLocation);
+            userControl.EnableViewState = false;
+
+            HtmlForm form = new HtmlForm();
+            form.Controls.Add(userControl);
+
+            page.Controls.Add(form);
+
+            StringWriter writer = new StringWriter();
+
+            HttpContext.Current.Server.Execute(page, writer, false);
+
+            return Regex.Replace(writer.ToString(), @"<[/]?(form)[^>]*?>", "", RegexOptions.IgnoreCase);
+        }
+
+
     }
 }
