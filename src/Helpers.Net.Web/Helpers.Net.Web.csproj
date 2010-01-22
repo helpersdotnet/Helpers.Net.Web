@@ -33,6 +33,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml" />
@@ -40,6 +41,8 @@
   <ItemGroup>
     <Compile Include="Application.cs" />
     <Compile Include="Controls.cs" />
+    <Compile Include="Cache.cs" />
+    <Compile Include="HttpHandlers\JsHttpHandler\JsHttpHandler.cs" />
     <Compile Include="HttpRequest\Gzip.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewState\ViewStateHelper.cs" />
