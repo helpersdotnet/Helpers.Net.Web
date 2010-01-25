@@ -28,11 +28,17 @@ namespace Helpers.Net.Web.HttpHandlers
             string version = request["v"] ?? string.Empty;
             string purgecache = request["purgecache"] ?? string.Empty; //anyvalue is fine
 
-            if (!string.IsNullOrEmpty(purgecache))
+            bool isPurgeCache = !string.IsNullOrEmpty(purgecache);
+            if (isPurgeCache)
                 PurgeAllCache(context);
 
             string[] files = (request["f"] ?? string.Empty).Split(
                 new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+
+            if (!string.IsNullOrEmpty(setName) && files.Length > 0)
+            { // if both setname and files are declared its an error.
+                throw new HttpException(404, "Both setname and file list cannot be specified.");
+            }
 
             // Decide if browser supports compressed response
             bool isCompressed = false;
@@ -55,6 +61,8 @@ namespace Helpers.Net.Web.HttpHandlers
                     // check if browser really supports compression
                     isCompressed = CanGZip(context.Request);
                 }
+
+                setName = GenerateSetName(files, context);
 
                 // If the set has already been cached, write the response directly from
                 // cache. Otherwise generate the response and cache it
@@ -90,10 +98,34 @@ namespace Helpers.Net.Web.HttpHandlers
                             CACHE_DURATION);
 
                         // Generate the response
-                        this.WriteBytes(responseBytes, context, isCompressed, setName.GetHashCode());
+                        this.WriteBytes(responseBytes, context, isCompressed, setName.GetHashCode(), isPurgeCache);
                     }
                 }
             }
+            else // if using setname append _ by default
+            {
+                setName = "_" + setName;
+            }
+        }
+
+        private string GenerateSetName(string[] files, HttpContext context)
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach (string file in files)
+            {
+                if (file.StartsWith("http://") || file.StartsWith("https://"))
+                {
+                    sb.Append(file);
+                }
+                else
+                {
+                    string physicalPath = context.Server.MapPath(file);
+                    if (!File.Exists(physicalPath))
+                        throw new HttpException(404, "Javascript not found.");
+                    sb.Append(physicalPath);
+                }
+            }
+            return sb.ToString();
         }
 
         private byte[] GetFileBytes(HttpContext context, string virtualPath, Encoding encoding)
@@ -124,11 +156,11 @@ namespace Helpers.Net.Web.HttpHandlers
 
             if (null == responseBytes || 0 == responseBytes.Length) return false;
 
-            this.WriteBytes(responseBytes, context, isCompressed, hashCode);
+            this.WriteBytes(responseBytes, context, isCompressed, hashCode, false);
             return true;
         }
 
-        private void WriteBytes(byte[] bytes, HttpContext context, bool isCompressed, int hashCode)
+        private void WriteBytes(byte[] bytes, HttpContext context, bool isCompressed, int hashCode, bool isPurgeCache)
         {
             HttpResponse response = context.Response;
 
@@ -147,11 +179,14 @@ namespace Helpers.Net.Web.HttpHandlers
 
             context.Response.Cache.SetETag(etag);
 
-            if (incomingEtag == etag)
+            if (!isPurgeCache)
             {
-                context.Response.Clear();
-                context.Response.StatusCode = (int)HttpStatusCode.NotModified;
-                context.Response.SuppressContent = true;
+                if (incomingEtag == etag)
+                {
+                    context.Response.Clear();
+                    context.Response.StatusCode = (int)HttpStatusCode.NotModified;
+                    context.Response.SuppressContent = true;
+                }
             }
 
             response.OutputStream.Write(bytes, 0, bytes.Length);
