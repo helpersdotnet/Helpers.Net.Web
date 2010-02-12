@@ -169,24 +169,31 @@ namespace Helpers.Net.Web.HttpHandlers
             if (isCompressed)
                 response.AppendHeader("Content-Encoding", "gzip");
 
-            context.Response.Cache.SetRevalidation(HttpCacheRevalidation.AllCaches);
-            context.Response.Cache.SetCacheability(HttpCacheability.Public);
-            context.Response.Cache.SetExpires(DateTime.Now.Add(CACHE_DURATION));
-            context.Response.Cache.SetMaxAge(CACHE_DURATION);
-
-            string etag = "\"" + hashCode.ToString() + "\"";
-            string incomingEtag = context.Request.Headers["If-None-Match"];
-
-            context.Response.Cache.SetETag(etag);
-
             if (!isPurgeCache)
             {
+                context.Response.Cache.SetRevalidation(HttpCacheRevalidation.AllCaches);
+                context.Response.Cache.SetCacheability(HttpCacheability.Public);
+                context.Response.Cache.SetExpires(DateTime.Now.Add(CACHE_DURATION));
+                context.Response.Cache.SetMaxAge(CACHE_DURATION);
+
+                string etag = "\"" + hashCode.ToString() + "\"";
+                string incomingEtag = context.Request.Headers["If-None-Match"];
+
+                context.Response.Cache.SetETag(etag);
+
                 if (incomingEtag == etag)
                 {
                     context.Response.Clear();
                     context.Response.StatusCode = (int)HttpStatusCode.NotModified;
                     context.Response.SuppressContent = true;
                 }
+            }
+            else
+            {
+                context.Response.Cache.SetCacheability(HttpCacheability.NoCache);
+                context.Response.Cache.SetExpires(DateTime.Now - new TimeSpan(0, 0, 1));
+                context.Response.Cache.SetLastModified(DateTime.Now);
+                context.Response.Cache.SetAllowResponseInBrowserHistory(false);
             }
 
             response.OutputStream.Write(bytes, 0, bytes.Length);
