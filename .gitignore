@@ -1,5 +1,21 @@
+# Visual Studio Ignores
 bin/
 obj/
 
 *.suo
-*.swp # ignore vim swap files
+*.user
+
+*.ncb
+
+# Resharper Ignores
+_ReSharper.*/
+*.resharper.user
+
+# vim Ignore
+*.swp
+
+# kdiff3 Ignore
+*.orig
+
+# Misc Ignores
+Thumbs.db
