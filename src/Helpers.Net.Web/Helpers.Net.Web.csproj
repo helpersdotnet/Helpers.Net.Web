@@ -43,6 +43,7 @@
     <Compile Include="Application.cs" />
     <Compile Include="Controls.cs" />
     <Compile Include="Cache.cs" />
+    <Compile Include="Culture.cs" />
     <Compile Include="HttpHandlers\JsHttpHandler\JsHttpHandler.cs" />
     <Compile Include="HttpModules\WebResourceCompressionModule.cs" />
     <Compile Include="HttpModules\PageCompressionModule.cs" />
