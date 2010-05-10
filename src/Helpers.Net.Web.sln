@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Helpers.Net.Web", "Helpers.Net.Web\Helpers.Net.Web.csproj", "{771892D2-A9F9-4562-A042-9C3BBDD42214}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Helpers.Net.Web.Extensions", "Helpers.Net.Web.Extensions\Helpers.Net.Web.Extensions.csproj", "{A45069A5-6C5E-42B6-8185-2DB588D82653}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -13,6 +15,10 @@ Global
 		{771892D2-A9F9-4562-A042-9C3BBDD42214}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{771892D2-A9F9-4562-A042-9C3BBDD42214}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{771892D2-A9F9-4562-A042-9C3BBDD42214}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A45069A5-6C5E-42B6-8185-2DB588D82653}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A45069A5-6C5E-42B6-8185-2DB588D82653}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A45069A5-6C5E-42B6-8185-2DB588D82653}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A45069A5-6C5E-42B6-8185-2DB588D82653}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
