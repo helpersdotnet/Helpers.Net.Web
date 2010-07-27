@@ -71,12 +71,15 @@
             }
 
             /// <summary>
-            /// Automatically tries to compress if it supports compression. deflate then gzip.
+            /// Automatically tries to compress if it supports compression and addes the appropriate AcceptEncoding header. (deflate>gzip)
             /// </summary>
             /// <param name="context">
             /// The context.
             /// </param>
-            public static void TryCompress(HttpContext context)
+            /// <returns>
+            /// Returns true if it compressed otherwise false.
+            /// </returns>
+            public static bool TryCompress(HttpContext context)
             {
                 if (context != null)
                 {
@@ -84,13 +87,16 @@
                     {
                         context.Response.Filter = new DeflateStream(context.Response.Filter, CompressionMode.Compress);
                         SetDeflateEncoding(context);
+                        return true;
                     }
-                    else if (SupportsGzipEncoding(context))
+                    if (SupportsGzipEncoding(context))
                     {
                         context.Response.Filter = new GZipStream(context.Response.Filter, CompressionMode.Compress);
                         SetGZipEncoding(context);
+                        return true;
                     }
                 }
+                return false;
             }
         }
     }
