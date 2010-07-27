@@ -26,7 +26,7 @@ namespace Helpers.Net.Web.HttpModules
                 return;
             }
 
-            string acceptEncoding = app.Request.Headers["Accept-Encoding"];
+            string acceptEncoding = app.Request.Headers["Accept-Encoding"] ?? string.Empty;
             Stream uncompressedStream = app.Response.Filter;
 
             acceptEncoding = acceptEncoding.ToLower();
