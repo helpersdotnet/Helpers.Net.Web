@@ -12,7 +12,9 @@
 
             public static bool SupportsEncoding(HttpContext context, string encoding)
             {
-                return context.Request.Headers["Accept-encoding"] != null && context.Request.Headers["Accept-encoding"].Contains(encoding);
+                return context.Request.Headers["Accept-encoding"] != null &&
+                       context.Request.Headers["Accept-encoding"].Contains(encoding) &&
+                       !(context.Request.UserAgent ?? string.Empty).Contains("MSIE 6");
             }
 
             public static bool SupportsEncoding(string encoding)
