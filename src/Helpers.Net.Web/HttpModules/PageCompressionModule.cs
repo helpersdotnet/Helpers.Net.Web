@@ -26,17 +26,14 @@
                 return;
             }
 
-            string acceptEncoding = app.Request.Headers["Accept-Encoding"] ?? string.Empty;
             Stream uncompressedStream = app.Response.Filter;
 
-            acceptEncoding = acceptEncoding.ToLower();
-
-            if (acceptEncoding.Contains("deflate") || acceptEncoding == "*")
+            if (WebHelper.AcceptEncoding.SupportsDeflateEncoding(app.Context))
             {
                 app.Response.Filter = new DeflateStream(uncompressedStream, CompressionMode.Compress);
                 app.Response.AppendHeader("Content-Encoding", "deflate");
             }
-            else if (acceptEncoding.Contains("gzip"))
+            else if (WebHelper.AcceptEncoding.SupportsGzipEncoding(app.Context))
             {
                 app.Response.Filter = new GZipStream(uncompressedStream, CompressionMode.Compress);
                 app.Response.AppendHeader("Content-Encoding", "gzip");

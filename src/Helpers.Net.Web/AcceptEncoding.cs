@@ -9,34 +9,34 @@
             public const string GZIP = "gzip";
             public const string DEFLATE = "deflate";
 
-            public static bool IsEncodingAccepted(HttpContext context, string encoding)
+            public static bool SupportsEncoding(HttpContext context, string encoding)
             {
                 return context.Request.Headers["Accept-encoding"] != null && context.Request.Headers["Accept-encoding"].Contains(encoding);
             }
 
-            public static bool IsEncodingAccepted(string encoding)
+            public static bool SupportsEncoding(string encoding)
             {
-                return IsEncodingAccepted(HttpContext.Current, encoding);
+                return SupportsEncoding(HttpContext.Current, encoding);
             }
 
-            public static bool IsDeflateEncodingAccepted(HttpContext context)
+            public static bool SupportsDeflateEncoding(HttpContext context)
             {
-                return IsEncodingAccepted(context, DEFLATE) || IsEncodingAccepted(context, "*");
+                return SupportsEncoding(context, DEFLATE) || SupportsEncoding(context, "*");
             }
 
-            public static bool IsDeflateEncodingAccepted()
+            public static bool SupportsDeflateEncoding()
             {
-                return IsDeflateEncodingAccepted(HttpContext.Current);
+                return SupportsDeflateEncoding(HttpContext.Current);
             }
 
-            public static bool IsGzipEncodingAccepted(HttpContext context)
+            public static bool SupportsGzipEncoding(HttpContext context)
             {
-                return IsEncodingAccepted(context, GZIP) || IsEncodingAccepted(context, "*");
+                return SupportsEncoding(context, GZIP) || SupportsEncoding(context, "*");
             }
 
-            public static bool IsGzipEncodingAccepted()
+            public static bool SupportsGzipEncoding()
             {
-                return IsGzipEncodingAccepted(HttpContext.Current);
+                return SupportsGzipEncoding(HttpContext.Current);
             }
 
             public static void SetEncoding(HttpContext context, string encoding)

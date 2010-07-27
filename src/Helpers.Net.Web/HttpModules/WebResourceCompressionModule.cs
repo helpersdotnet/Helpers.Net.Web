@@ -24,8 +24,8 @@
                 SetCachingHeaders(app);
 
                 if (IsBrowserSupported() && app.Context.Request.QueryString["c"] == null &&
-                    (WebHelper.AcceptEncoding.IsDeflateEncodingAccepted(app.Context) ||
-                    WebHelper.AcceptEncoding.IsGzipEncodingAccepted(app.Context)))
+                    (WebHelper.AcceptEncoding.SupportsDeflateEncoding(app.Context) ||
+                    WebHelper.AcceptEncoding.SupportsGzipEncoding(app.Context)))
                 {
                     app.CompleteRequest();
                 }
@@ -37,8 +37,8 @@
             HttpApplication app = (HttpApplication)sender;
 
             if (IsBrowserSupported() && app.Context.Request.QueryString["c"] == null &&
-                   (!WebHelper.AcceptEncoding.IsDeflateEncodingAccepted(app.Context) &&
-                   !WebHelper.AcceptEncoding.IsGzipEncodingAccepted(app.Context)))
+                   (!WebHelper.AcceptEncoding.SupportsDeflateEncoding(app.Context) &&
+                   !WebHelper.AcceptEncoding.SupportsGzipEncoding(app.Context)))
             {
                 return;
             }
@@ -82,12 +82,12 @@
             MemoryStream ms = new MemoryStream();
             Stream compress = null;
 
-            if (WebHelper.AcceptEncoding.IsDeflateEncodingAccepted())
+            if (WebHelper.AcceptEncoding.SupportsDeflateEncoding())
             {
                 compress = new DeflateStream(ms, CompressionMode.Compress);
                 app.Application.Add(key + "enc", WebHelper.AcceptEncoding.DEFLATE);
             }
-            else if (WebHelper.AcceptEncoding.IsGzipEncodingAccepted())
+            else if (WebHelper.AcceptEncoding.SupportsGzipEncoding())
             {
                 compress = new GZipStream(ms, CompressionMode.Compress);
                 app.Application.Add(key + "enc", WebHelper.AcceptEncoding.GZIP);
