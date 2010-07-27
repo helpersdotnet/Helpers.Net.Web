@@ -59,7 +59,8 @@
                 if (isCompressed)
                 {
                     // check if browser really supports compression
-                    isCompressed = CanGZip(context.Request);
+                    isCompressed = WebHelper.AcceptEncoding.SupportsGzipEncoding() ||
+                                   WebHelper.AcceptEncoding.SupportsDeflateEncoding();
                 }
 
                 setName = GenerateSetName(files, context);
@@ -167,7 +168,7 @@
             response.AppendHeader("Content-Length", bytes.Length.ToString());
             response.ContentType = "text/javascript";
             if (isCompressed)
-                response.AppendHeader("Content-Encoding", "gzip");
+                WebHelper.AcceptEncoding.SetGZipEncoding(context);
 
             if (!isPurgeCache)
             {
@@ -198,15 +199,6 @@
 
             response.OutputStream.Write(bytes, 0, bytes.Length);
             response.Flush();
-        }
-
-        private bool CanGZip(HttpRequest request)
-        {
-            string acceptEncoding = request.Headers["Accept-Encoding"];
-            if (!string.IsNullOrEmpty(acceptEncoding) &&
-                 (acceptEncoding.Contains("gzip") || acceptEncoding.Contains("deflate")))
-                return true;
-            return false;
         }
 
         private string GetCacheKey(string setName, string version, bool isCompressed)
