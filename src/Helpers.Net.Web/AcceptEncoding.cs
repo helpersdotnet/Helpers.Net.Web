@@ -1,6 +1,7 @@
 ﻿namespace Helpers.Net.Web
 {
     using System.Web;
+    using System.IO.Compression;
 
     public static partial class WebHelper
     {
@@ -67,6 +68,29 @@
             public static void SetDeflateEncoding()
             {
                 SetDeflateEncoding(HttpContext.Current);
+            }
+
+            /// <summary>
+            /// Automatically tries to compress if it supports compression. deflate then gzip.
+            /// </summary>
+            /// <param name="context">
+            /// The context.
+            /// </param>
+            public static void TryCompress(HttpContext context)
+            {
+                if (context != null)
+                {
+                    if (SupportsDeflateEncoding(context))
+                    {
+                        context.Response.Filter = new DeflateStream(context.Response.Filter, CompressionMode.Compress);
+                        SetDeflateEncoding(context);
+                    }
+                    else if (SupportsGzipEncoding(context))
+                    {
+                        context.Response.Filter = new GZipStream(context.Response.Filter, CompressionMode.Compress);
+                        SetGZipEncoding(context);
+                    }
+                }
             }
         }
     }
