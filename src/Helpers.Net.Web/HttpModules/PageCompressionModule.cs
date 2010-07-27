@@ -12,7 +12,7 @@
 
         public void Init(HttpApplication context)
         {
-            context.PreRequestHandlerExecute += new EventHandler(context_PreRequestHandlerExecute);
+            context.PreRequestHandlerExecute += context_PreRequestHandlerExecute;
         }
 
         void context_PreRequestHandlerExecute(object sender, EventArgs e)
@@ -31,12 +31,12 @@
             if (WebHelper.AcceptEncoding.SupportsDeflateEncoding(app.Context))
             {
                 app.Response.Filter = new DeflateStream(uncompressedStream, CompressionMode.Compress);
-                app.Response.AppendHeader("Content-Encoding", "deflate");
+                WebHelper.AcceptEncoding.SetDeflateEncoding(app.Context);
             }
             else if (WebHelper.AcceptEncoding.SupportsGzipEncoding(app.Context))
             {
                 app.Response.Filter = new GZipStream(uncompressedStream, CompressionMode.Compress);
-                app.Response.AppendHeader("Content-Encoding", "gzip");
+                WebHelper.AcceptEncoding.SetGZipEncoding(app.Context);
             }
         }
     }

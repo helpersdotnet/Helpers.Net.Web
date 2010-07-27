@@ -48,6 +48,26 @@
             {
                 SetEncoding(HttpContext.Current, encoding);
             }
+
+            public static void SetGZipEncoding(HttpContext context)
+            {
+                SetEncoding(context, GZIP);
+            }
+
+            public static void SetGZipEncoding()
+            {
+                SetGZipEncoding(HttpContext.Current);
+            }
+
+            public static void SetDeflateEncoding(HttpContext context)
+            {
+                SetEncoding(context, DEFLATE);
+            }
+
+            public static void SetDeflateEncoding()
+            {
+                SetDeflateEncoding(HttpContext.Current);
+            }
         }
     }
 }

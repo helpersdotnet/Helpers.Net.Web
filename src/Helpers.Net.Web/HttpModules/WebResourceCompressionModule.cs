@@ -12,8 +12,8 @@
 
         public void Init(HttpApplication context)
         {
-            context.BeginRequest += new EventHandler(context_BeginRequest);
-            context.EndRequest += new EventHandler(context_EndRequest);
+            context.BeginRequest += context_BeginRequest;
+            context.EndRequest += context_EndRequest;
         }
 
         void context_BeginRequest(object sender, EventArgs e)
