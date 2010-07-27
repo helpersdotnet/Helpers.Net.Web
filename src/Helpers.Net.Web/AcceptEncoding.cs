@@ -71,7 +71,7 @@
             }
 
             /// <summary>
-            /// Automatically tries to compress if it supports compression and addes the appropriate AcceptEncoding header. (deflate>gzip)
+            /// Automatically tries to compress if it supports compression and adds the appropriate AcceptEncoding header. (deflate>gzip)
             /// </summary>
             /// <param name="context">
             /// The context.

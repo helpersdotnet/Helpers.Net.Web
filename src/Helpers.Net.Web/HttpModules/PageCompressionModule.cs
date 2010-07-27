@@ -1,19 +1,11 @@
 ﻿namespace Helpers.Net.Web.HttpModules
 {
     using System;
-    using System.IO;
-    using System.IO.Compression;
     using System.Web;
     using System.Web.UI;
 
     public class PageCompressionModule : IHttpModule
     {
-        public void Dispose() { }
-
-        public void Init(HttpApplication context)
-        {
-            context.PreRequestHandlerExecute += context_PreRequestHandlerExecute;
-        }
 
         void context_PreRequestHandlerExecute(object sender, EventArgs e)
         {
@@ -26,18 +18,28 @@
                 return;
             }
 
-            Stream uncompressedStream = app.Response.Filter;
-
-            if (WebHelper.AcceptEncoding.SupportsDeflateEncoding(app.Context))
-            {
-                app.Response.Filter = new DeflateStream(uncompressedStream, CompressionMode.Compress);
-                WebHelper.AcceptEncoding.SetDeflateEncoding(app.Context);
-            }
-            else if (WebHelper.AcceptEncoding.SupportsGzipEncoding(app.Context))
-            {
-                app.Response.Filter = new GZipStream(uncompressedStream, CompressionMode.Compress);
-                WebHelper.AcceptEncoding.SetGZipEncoding(app.Context);
-            }
+            WebHelper.AcceptEncoding.TryCompress(app.Context);
         }
+
+        #region Implementation of IHttpModule
+
+        /// <summary>
+        /// Initializes a module and prepares it to handle requests.
+        /// </summary>
+        /// <param name="context">An <see cref="T:System.Web.HttpApplication"/> that provides access to the methods, properties, and events common to all application objects within an ASP.NET application 
+        /// </param>
+        public void Init(HttpApplication context)
+        {
+            context.PreRequestHandlerExecute += context_PreRequestHandlerExecute;
+        }
+
+        /// <summary>
+        /// Disposes of the resources (other than memory) used by the module that implements <see cref="T:System.Web.IHttpModule"/>.
+        /// </summary>
+        public void Dispose()
+        {
+        }
+
+        #endregion
     }
 }
