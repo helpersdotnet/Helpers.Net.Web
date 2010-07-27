@@ -1,7 +1,7 @@
-﻿using System.Web;
-
-namespace Helpers.Net.Web
+﻿namespace Helpers.Net.Web
 {
+    using System.Web;
+
     public static partial class WebHelper
     {
         public static class AcceptEncoding

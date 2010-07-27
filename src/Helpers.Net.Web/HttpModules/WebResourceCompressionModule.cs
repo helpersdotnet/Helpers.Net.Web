@@ -1,12 +1,11 @@
-﻿using System;
-using System.IO;
-using System.IO.Compression;
-using System.Net;
-using System.Web;
-using System.Web.UI;
-
-namespace Helpers.Net.Web.HttpModules
+﻿namespace Helpers.Net.Web.HttpModules
 {
+    using System;
+    using System.IO;
+    using System.IO.Compression;
+    using System.Net;
+    using System.Web;
+
     public class WebResourceCompressionModule : IHttpModule
     {
         public void Dispose() { }

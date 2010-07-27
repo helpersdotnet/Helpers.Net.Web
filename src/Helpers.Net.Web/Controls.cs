@@ -1,12 +1,11 @@
-﻿using System.IO;
-using System.Text.RegularExpressions;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.HtmlControls;
-using System;
-
-namespace Helpers.Net.Web
+﻿namespace Helpers.Net.Web
 {
+    using System.IO;
+    using System.Text.RegularExpressions;
+    using System.Web;
+    using System.Web.UI;
+    using System.Web.UI.HtmlControls;
+
     public static partial class WebHelper
     {
         /// <summary>

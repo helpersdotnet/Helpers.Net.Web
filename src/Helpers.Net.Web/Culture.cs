@@ -1,6 +1,7 @@
-using System.Globalization;
 namespace Helpers.Net.Web
 {
+    using System.Globalization;
+
     public static partial class WebHelper
     {
         public static string GetUICultureCode()

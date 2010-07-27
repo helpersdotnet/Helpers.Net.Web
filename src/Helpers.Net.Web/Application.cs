@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace Helpers.Net.Web
+﻿namespace Helpers.Net.Web
 {
+    using System;
+
     public static partial class WebHelper
     {
         /// <summary>

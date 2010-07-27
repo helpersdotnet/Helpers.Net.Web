@@ -1,10 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Web;
-using System.Web.Caching;
-
-namespace Helpers.Net.Web
+﻿namespace Helpers.Net.Web
 {
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Web;
+    using System.Web.Caching;
+
     public static partial class WebHelper
     {
         public static void PurgeCacheItems(Cache cache, string prefix)

@@ -1,12 +1,12 @@
-﻿using System;
-using System.IO;
-using System.IO.Compression;
-using System.Net;
-using System.Text;
-using System.Web;
-
-namespace Helpers.Net.Web.HttpHandlers
+﻿namespace Helpers.Net.Web.HttpHandlers
 {
+    using System;
+    using System.IO;
+    using System.IO.Compression;
+    using System.Net;
+    using System.Text;
+    using System.Web;
+
     public class JsHttpHandler : IHttpHandler
     {
         private readonly static TimeSpan CACHE_DURATION = TimeSpan.FromDays(30);
